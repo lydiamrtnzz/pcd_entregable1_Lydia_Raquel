@@ -100,6 +100,19 @@ class NaveEstelar(Nave):
         self.pasaje = pasaje
         self.clase = clase
 
+    def __str__(self):
+        return  super().__str__() + f", tripulacion: {self.tripulacion}, pasaje: {self.pasaje}, clase: {self.clase}"
+
+    def get_clase(self):
+        return self.clase
+    
+    def set_clase(self, clase : Clase):
+        self.clase = clase
+
+    def get_capacidad(self):
+        return self.tripulacion + self.pasaje
+    
+
 class CazaEstelar(Nave):
     def __init__(self, id_combate:str, clave:int, nombre:str, dotacion:int, piezas:list[str]=None):
         super().__init__(id_combate, clave, nombre, piezas)
