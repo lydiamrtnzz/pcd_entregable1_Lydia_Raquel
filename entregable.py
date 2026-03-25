@@ -195,10 +195,47 @@ class Repuesto:
 class Almacen:
 
     def __init__(self, nombre:str, id_almacen: int, localizacion:str, catalogo: list[Repuesto] = None):
+        
+        if not nombre:
+            raise ValueError("El nombre del almacén no puede estar vacío")
+        if not localizacion:
+            raise ValueError("La localización no puede estar vacía")
+        
         self.nombre = nombre
         self.id_almacen = id_almacen
         self.localizacion = localizacion
         self.catalogo = catalogo if catalogo else []
+
+    def __str__(self):
+        return f"Almacen {self.nombre} \nLocalizacion: {self.localizacion}"
+
+    def repuesto_en_almacen(self, repuesto):
+        return repuesto in self.catalogo
+    
+    def buscar_repuesto(self, nombre):
+        for r in self.catalogo:
+            if r.nombre == nombre:
+                return r
+        return None
+    
+    def añadir_repuesto(self, repuesto : Repuesto):
+        if not isinstance(repuesto, Repuesto):
+            raise ValueError('El objeto proporcionado no es un repuesto válido. Debe ser una instancia de la clase Repuesto.')
+        if repuesto in self.catalogo:
+            raise ValueError(f'El repuesto "{repuesto.nombre}" ya existe en el catálogo.')
+        else:
+            self.catalogo.append(repuesto)
+
+    def quitar_repuesto(self, repuesto : Repuesto):
+        if not isinstance(repuesto, Repuesto):
+            raise ValueError('El objeto proporcionado no es un repuesto válido. Debe ser una instancia de la clase Repuesto.')
+        if repuesto not in self.catalogo:
+            raise ValueError(f'El repuesto "{repuesto.nombre}" no existe en el catálogo.')
+        else:
+            self.catalogo.remove(repuesto)
+
+    def listar_repuestos(self):
+        print(f"La lista de repuestos en el almacén {self.id_almacen} es: {', '.join(r.nombre for r in self.catalogo)}")
 
 class Usuario:
     def __init__(self, nombre:str, id_usuario:int):
