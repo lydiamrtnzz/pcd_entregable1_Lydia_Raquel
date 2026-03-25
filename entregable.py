@@ -27,8 +27,38 @@ class UnidadCombate():
 class Nave(UnidadCombate):
     def __init__(self, id_combate:str, clave:int, nombre:str, piezas:list[str] = None):
         super().__init__(id_combate, clave)
+
+        if not nombre:
+            raise ValueError("El nombre de la nave no puede estar vacío")
+        
         self.nombre = nombre
         self.piezas = piezas if piezas else []
+
+    def __str__(self):
+        return  super().__str__() + f"\nNombre: {self.nombre} \nPiezas: {', '.join(self.piezas)}"
+
+    def añadir_piezas(self, pieza_repuesto):
+        if pieza_repuesto in self.piezas:
+            raise ValueError("Pieza ya incluida")
+        self.piezas.append(pieza_repuesto)
+
+    def quitar_piezas(self, pieza_repuesto):
+        if pieza_repuesto not in self.piezas:
+            raise ValueError("Pieza no disponible")
+        self.piezas.remove(pieza_repuesto)
+
+    def listar_piezas(self):
+        print(f"La lista de piezas de la nave {self.nombre} es: {', '.join(self.piezas)}") 
+
+    def tiene_pieza(self, pieza):
+        return pieza in self.piezas
+
+    def numero_piezas(self):
+        return len(self.piezas)
+
+    def vaciar_piezas(self):
+        self.piezas.clear()
+
 
 class EstacionEspacial(Nave):
     def __init__(self, id_combate:str, clave:int, nombre:str, tripulacion:int, pasaje:int, ubicacion: Ubicacion, piezas:list[str]=None):
