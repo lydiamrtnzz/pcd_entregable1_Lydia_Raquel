@@ -145,10 +145,52 @@ class CazaEstelar(Nave):
 
 class Repuesto:
     def __init__(self, nombre, proveedor, cantidad, precio):
+
+        if not nombre:
+            raise ValueError("El nombre no puede estar vacío")
+        if not proveedor:
+            raise ValueError("El proveedor no puede estar vacío")
+        if cantidad < 0:
+            raise ValueError("La cantidad no puede ser negativa")
+        if precio <= 0:
+            raise ValueError("El precio debe ser positivo")
+        
         self.nombre = nombre
         self.proveedor = proveedor
         self.__cantidad = cantidad
         self.precio = precio
+    
+    def __str__(self):
+        return f'Repuesto: {self.nombre} \nCantidad: {self.__cantidad} \nProveedor: {self.proveedor} \nPrecio: {self.precio}'
+
+    def disminuir_cantidad(self, cantidad):
+        if cantidad <= 0:
+            raise ValueError("Cantidad inválida")
+        if cantidad > self.__cantidad:
+            raise ValueError(f"No hay suficiente stock de {self.nombre} (disponibles: {self.__cantidad})")
+        self.__cantidad -= cantidad
+            
+    def aumentar_cantidad(self, cantidad):
+        if cantidad <= 0:
+            raise ValueError("Cantidad inválida")
+        self.__cantidad += cantidad
+
+    def consultar_disponibilidad(self):
+        return self.__cantidad > 0
+
+    def get_cantidad(self):
+        return self.__cantidad
+    
+    def get_precio(self):
+        return self.precio
+
+    def set_precio(self, precio):
+        if precio <= 0:
+            raise ValueError("Precio inválido")
+        self.precio = precio
+
+    def valor_total_stock(self):
+        return self.__cantidad * self.precio
 
 class Almacen:
 
