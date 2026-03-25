@@ -116,7 +116,32 @@ class NaveEstelar(Nave):
 class CazaEstelar(Nave):
     def __init__(self, id_combate:str, clave:int, nombre:str, dotacion:int, piezas:list[str]=None):
         super().__init__(id_combate, clave, nombre, piezas)
+
+        if dotacion <= 0:
+            raise ValueError("La dotación debe ser positiva")
+        
         self.dotacion = dotacion
+
+    def __str__(self):
+        return super().__str__() + f"\nDotacion: {self.dotacion}"
+    
+    def get_dotacion(self):
+        return self.dotacion
+    
+    def set_dotacion(self, dotacion : int):
+        if dotacion <= 0:
+            raise ValueError("La dotación debe ser positiva")
+        self.dotacion = dotacion
+
+    def aumentar_dotacion(self, cantidad):
+        if cantidad <= 0:
+            raise ValueError("Cantidad inválida")
+        self.dotacion += cantidad
+
+    def reducir_dotacion(self, cantidad):
+        if cantidad <= 0 or cantidad > self.dotacion:
+            raise ValueError("Cantidad inválida")
+        self.dotacion -= cantidad
 
 class Repuesto:
     def __init__(self, nombre, proveedor, cantidad, precio):
