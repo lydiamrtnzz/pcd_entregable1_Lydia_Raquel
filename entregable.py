@@ -12,8 +12,17 @@ class Clase(Enum):
 
 class UnidadCombate():
     def __init__(self, id_combate:str, clave:int):
+
+        if not id_combate:
+            raise ValueError("El id de combate no puede estar vacío")
+        if clave <= 0:
+            raise ValueError("La clave debe ser positiva")
+
         self.id_combate = id_combate
         self.clave = clave
+
+        def __str__(self):
+            return f"Id: {self.id_combate} \nClave: {self.clave}"
 
 class Nave(UnidadCombate):
     def __init__(self, id_combate:str, clave:int, nombre:str, piezas:list[str] = None):
