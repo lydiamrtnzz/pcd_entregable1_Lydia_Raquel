@@ -21,8 +21,8 @@ class UnidadCombate():
         self.id_combate = id_combate
         self.clave = clave
 
-        def __str__(self):
-            return f"Id: {self.id_combate} \nClave: {self.clave}"
+    def __str__(self):
+        return f"Id: {self.id_combate} \nClave: {self.clave}"
 
 class Nave(UnidadCombate):
     def __init__(self, id_combate:str, clave:int, nombre:str, piezas:list[str] = None):
@@ -63,9 +63,35 @@ class Nave(UnidadCombate):
 class EstacionEspacial(Nave):
     def __init__(self, id_combate:str, clave:int, nombre:str, tripulacion:int, pasaje:int, ubicacion: Ubicacion, piezas:list[str]=None):
         super().__init__(id_combate, clave, nombre, piezas)
+
+        if tripulacion < 0 or pasaje < 0:
+            raise ValueError("Capacidad inválida")
+
         self.tripulacion = tripulacion
         self.pasaje = pasaje
         self.ubicacion = ubicacion
+
+    def __str__(self):
+        return super().__str__() + f"\nTripulacion: {self.tripulacion} \nPasaje: {self.pasaje} \nUbicacion: {self.ubicacion}"
+
+    def get_ubicacion(self):
+        return self.ubicacion
+    
+    def set_ubicacion(self, ubicacion : Ubicacion):
+        self.ubicacion = ubicacion
+
+    def get_capacidad(self):
+        return self.tripulacion + self.pasaje
+    
+    def añadir_pasajeros(self, cantidad):
+        if cantidad <= 0:
+            raise ValueError("Cantidad inválida")
+        self.pasaje += cantidad
+
+    def quitar_pasajeros(self, cantidad):
+        if cantidad <= 0 or cantidad > self.pasaje:
+            raise ValueError("Cantidad inválida")
+        self.pasaje -= cantidad
 
 class NaveEstelar(Nave):
     def __init__(self, id_combate:str, clave:int, nombre:str, tripulacion:int, pasaje:int, clase: Clase, piezas:list[str]=None):
