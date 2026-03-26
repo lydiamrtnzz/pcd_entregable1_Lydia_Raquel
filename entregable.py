@@ -234,8 +234,11 @@ class Almacen:
         else:
             self.catalogo.remove(repuesto)
 
+    def get_catalogo(self):
+        return self.catalogo
+
     def listar_repuestos(self):
-        print(f"La lista de repuestos en el almacén {self.id_almacen} es: {', '.join(r.nombre for r in self.catalogo)}")
+        print(f"La lista de repuestos en el almacén {self.id_almacen} es: {', '.join(r.nombre for r in self.get_catalogo())}")
 
 class Usuario:
     def __init__(self, nombre:str, id_usuario:int):
@@ -282,3 +285,67 @@ class Operario(Usuario):
         if almacen.repuesto_en_almacen(repuesto):
             raise ValueError("El repuesto ya existe en el almacén")
         almacen.añadir_repuesto(repuesto)
+
+class MiImperio:
+    def __init__(self, nombre: str):
+        self.nombre = nombre
+        self.usuarios = []
+        self.unidades_combate = []
+        self.almacenes = []
+
+    def alta_usuario(self, usuario: Usuario):
+        if not isinstance(usuario, Usuario):
+            raise ValueError('El objeto proporcionado no es un Usuario válido. Debe ser una instancia de la clase Usuario.')
+        if usuario in self.usuarios:
+            raise ValueError(f'El usuario "{usuario.nombre}" ya existe en el imperio.')
+        else:
+            self.usuarios.append(usuario)
+
+    def alta_unidad_combate(self, unidad_combate):
+        if not isinstance(unidad_combate, UnidadCombate):
+            raise ValueError('El objeto proporcionado no es una Unidad de Combate válida. Debe ser una instancia de la clase UnidadCombate.')
+        if unidad_combate in self.unidades_combate:
+            raise ValueError(f'La Unidad de Combate "{unidad_combate.id_combate}" ya existe en el imperio.')
+        else:
+            self.unidades_combate.append(unidad_combate)
+
+    def alta_almacen(self, almacen: Almacen):
+        if not isinstance(almacen, Almacen):
+            raise ValueError('El objeto proporcionado no es un almacén válido. Debe ser una instancia de la clase Almacen.')
+        if almacen in self.almacenes:
+            raise ValueError(f'El almacén "{almacen.nombre}" ya existe en el imperio.')
+        else:
+            self.almacenes.append(almacen)
+
+    def baja_usuario(self, usuario: Usuario):
+        if not isinstance(usuario, Usuario):
+            raise ValueError('El objeto proporcionado no es un Usuario válido. Debe ser una instancia de la clase Usuario.')
+        if usuario not in self.usuarios:
+            raise ValueError(f'El usuario "{usuario.nombre}" no existe en el imperio.')
+        else:
+            self.usuarios.remove(usuario)
+
+    def baja_unidad_combate(self, unidad_combate):
+        if not isinstance(unidad_combate, UnidadCombate):
+            raise ValueError('El objeto proporcionado no es una Unidad de Combate válida. Debe ser una instancia de la clase UnidadCombate.')
+        if unidad_combate not in self.unidades_combate:
+            raise ValueError(f'La Unidad de Combate "{unidad_combate.nombre}" no existe en el imperio.')
+        else:
+            self.unidades_combate.remove(unidad_combate)
+
+    def baja_almacen(self, almacen: Almacen):
+        if not isinstance(almacen, Almacen):
+            raise ValueError('El objeto proporcionado no es un almacén válido. Debe ser una instancia de la clase Almacen.')
+        if almacen not in self.almacenes:
+            raise ValueError(f'El almacén "{almacen.nombre}" no existe en el imperio.')
+        else:
+            self.almacenes.remove(almacen)
+
+    def listar_usuarios(self):
+        print(', '.join(u.nombre for u in self.usuarios))
+    
+    def listar_unidades_combate(self):
+        print(', '.join(u.id_combate for u in self.unidades_combate))
+
+    def listar_almacenes(self):
+        print(', '.join(a.nombre for a in self.almacenes))
