@@ -239,8 +239,17 @@ class Almacen:
 
 class Usuario:
     def __init__(self, nombre:str, id_usuario:int):
+
+        if not nombre:
+            raise ValueError("El nombre no puede estar vacío")
+        if id_usuario <= 0:
+            raise ValueError("El id de usuario debe ser positivo")
+    
         self.nombre = nombre
         self.id_usuario = id_usuario
+        
+    def __str__(self):
+        return f"Nombre: {self.nombre}"
 
 class Comandante(Usuario):
     def __init__(self, nombre, id_usuario):
