@@ -404,12 +404,6 @@ def demo():
         imperio.listar_unidades_combate()
         print()
 
-        # Mostrar estado de las naves
-        print("Estado de las naves:")
-        for unidad in imperio.unidades_combate:
-            print(f"{unidad.nombre if hasattr(unidad, 'nombre') else unidad.id_combate}: {unidad.get_estado()}")
-        print()
-
         # Comandante adquiere repuesto
         try:
             comandante.adquirir_repuesto(repuesto1, 2, imperio)
@@ -457,19 +451,10 @@ def demo():
         print(f"Dotación después de aumentar: {nave2.dotacion}")
         nave2.reducir_dotacion(2)
         print(f"Dotación después de reducir: {nave2.dotacion}")
-        print(f"{nave2.nombre} operativo?: {nave2.es_operativo()}\n")
 
         # Mostrar capacidades
         print(f"Capacidad total de {nave1.nombre}: {nave1.get_capacidad()}")
         print(f"Capacidad total de {estacion.nombre}: {estacion.get_capacidad()}\n")
-
-        # Vender repuesto y reabastecer
-        print(f"Vendiendo 1 unidad de {repuesto2.nombre}")
-        valor_venta = almacen.vender_repuesto("Escudo Y", 1)
-        print(f"Valor obtenido: {valor_venta}")
-        print(f"Stock después de venta: {repuesto2.get_cantidad()} unidades")
-        almacen.reabastecer_repuesto("Escudo Y", 5)
-        print(f"Stock después de reabastecer 5 unidades: {repuesto2.get_cantidad()} unidades\n")
 
         # Bajas de usuarios, unidades y almacenes
         imperio.baja_usuario(comandante)
