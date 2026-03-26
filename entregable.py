@@ -266,9 +266,19 @@ class Comandante(Usuario):
                 return
         raise ValueError("No encontrado en ningún almacén")
     
-    def es_comandante(self):
-        return True
-    
 class Operario(Usuario):
     def __init__(self, nombre, id_usuario):
-        super().__init__(nombre, id_usuario) 
+        super().__init__(nombre, id_usuario)   
+
+    def gestionar_stock(self, almacen:Almacen):
+        for elem in almacen.catalogo.copy():  
+            # Usamos copy() porque si recorremos directamente almacen.catalogo
+            # y eliminamos elementos durante la iteración, la lista puede cambiar
+            # de tamaño y provocar errores o saltarse elementos.
+            if not elem.consultar_disponibilidad():
+                almacen.quitar_repuesto(elem)
+
+    def añadir_repuesto(self, almacen: Almacen, repuesto: Repuesto):
+        if almacen.repuesto_en_almacen(repuesto):
+            raise ValueError("El repuesto ya existe en el almacén")
+        almacen.añadir_repuesto(repuesto)
