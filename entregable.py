@@ -252,9 +252,23 @@ class Usuario:
         return f"Nombre: {self.nombre}"
 
 class Comandante(Usuario):
+    
     def __init__(self, nombre, id_usuario):
         super().__init__(nombre, id_usuario)
 
+    def consultar_almacen(self, almacen: Almacen):
+        almacen.listar_repuestos()
+
+    def adquirir_repuesto(self, repuesto, cantidad, imperio):
+        for almacen in imperio.almacenes:
+            if almacen.repuesto_en_almacen(repuesto):
+                repuesto.disminuir_cantidad(cantidad)
+                return
+        raise ValueError("No encontrado en ningún almacén")
+    
+    def es_comandante(self):
+        return True
+    
 class Operario(Usuario):
     def __init__(self, nombre, id_usuario):
         super().__init__(nombre, id_usuario) 
