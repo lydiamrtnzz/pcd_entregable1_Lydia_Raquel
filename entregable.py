@@ -349,3 +349,142 @@ class MiImperio:
 
     def listar_almacenes(self):
         print(', '.join(a.nombre for a in self.almacenes))
+
+def demo():
+    print("=== DEMO MiImperio ===\n")
+    try:
+        # Crear imperio
+        imperio = MiImperio("Imperio Galáctico")
+        print(f"Creado {imperio.nombre}\n")
+
+        # Crear usuarios
+        comandante = Comandante("Pepita", 101)
+        operario = Operario("Rico", 102)
+
+        # Alta de usuarios
+        imperio.alta_usuario(comandante)
+        imperio.alta_usuario(operario)
+        print("Usuarios dados de alta en el imperio:")
+        imperio.listar_usuarios()
+        print()
+
+        # Crear repuestos
+        repuesto1 = Repuesto("Motor X", "Proveedor1", 5, 1000)
+        repuesto2 = Repuesto("Escudo Y", "Proveedor2", 3, 1500)
+        repuesto3 = Repuesto("Láser Z", "Proveedor3", 0, 2000)  # Cantidad 0 para probar eliminación
+
+        # Crear almacén y añadir repuestos
+        almacen = Almacen("Central", 1, "Endor")
+        try:
+            operario.añadir_repuesto(almacen, repuesto1)
+            operario.añadir_repuesto(almacen, repuesto2)
+            operario.añadir_repuesto(almacen, repuesto3)
+        except ValueError as e:
+            print("Error al añadir repuesto:", e)
+
+        imperio.alta_almacen(almacen)
+        print(f"Almacén {almacen.nombre} añadido al imperio\n")
+
+        # Listar repuestos con stock y valor total
+        print("Repuestos en el almacén (cantidad y valor total):")
+        for r in almacen.catalogo:
+            print(f"{r.nombre}: {r.get_cantidad()} unidades, Valor total: {r.valor_total_stock()}")
+        print()
+
+        # Crear unidades de combate
+        nave1 = NaveEstelar("NC-01", 1, "Eclipse", 10, 20, Clase.ECLIPSE)
+        nave2 = CazaEstelar("C-01", 2, "Faucon", 5)
+        estacion = EstacionEspacial("ES-01", 3, "Estación Endor", 50, 100, Ubicacion.ENDOR)
+
+        # Alta de unidades en imperio
+        imperio.alta_unidad_combate(nave1)
+        imperio.alta_unidad_combate(nave2)
+        imperio.alta_unidad_combate(estacion)
+        print("Unidades de combate en el imperio:")
+        imperio.listar_unidades_combate()
+        print()
+
+        # Mostrar estado de las naves
+        print("Estado de las naves:")
+        for unidad in imperio.unidades_combate:
+            print(f"{unidad.nombre if hasattr(unidad, 'nombre') else unidad.id_combate}: {unidad.get_estado()}")
+        print()
+
+        # Comandante adquiere repuesto
+        try:
+            comandante.adquirir_repuesto(repuesto1, 2, imperio)
+            comandante.adquirir_repuesto(repuesto2, 1, imperio)
+        except ValueError as e:
+            print("Error al adquirir repuesto:", e)
+        print("Stock después de adquisiciones del comandante:")
+        for r in almacen.catalogo:
+            print(f"{r.nombre}: {r.get_cantidad()} unidades")
+        print()
+
+        # Operario gestiona stock (elimina repuesto3 porque cantidad=0)
+        operario.gestionar_stock(almacen)
+        print("Stock después de gestión de operario:")
+        for r in almacen.catalogo:
+            print(f"{r.nombre}: {r.get_cantidad()} unidades")
+        print()
+
+        # Probar añadir y quitar piezas en nave1
+        try:
+            nave1.añadir_piezas("Motor X")
+            nave1.añadir_piezas("Escudo Y")
+            print(f"Piezas de {nave1.nombre} después de añadir:")
+            nave1.listar_piezas()
+            print(f"Número de piezas: {nave1.numero_piezas()}")
+            nave1.quitar_piezas("Motor X")
+            print(f"Piezas de {nave1.nombre} después de quitar Motor X:")
+            nave1.listar_piezas()
+        except ValueError as e:
+            print("Error en gestión de piezas:", e)
+        print()
+
+        # Cambiar ubicación de estación y añadir/quitar pasajeros
+        print(f"Ubicación original de {estacion.nombre}: {estacion.get_ubicacion()}")
+        estacion.set_ubicacion(Ubicacion.NEBULOSA_KALIIDA)
+        print(f"Ubicación nueva de {estacion.nombre}: {estacion.get_ubicacion()}")
+        estacion.añadir_pasajeros(10)
+        print(f"Pasaje después de añadir 10 pasajeros: {estacion.pasaje}")
+        estacion.quitar_pasajeros(5)
+        print(f"Pasaje después de quitar 5 pasajeros: {estacion.pasaje}\n")
+
+        # Probar aumentar/reducir dotación caza estelar
+        print(f"Dotación original de {nave2.nombre}: {nave2.dotacion}")
+        nave2.aumentar_dotacion(3)
+        print(f"Dotación después de aumentar: {nave2.dotacion}")
+        nave2.reducir_dotacion(2)
+        print(f"Dotación después de reducir: {nave2.dotacion}")
+        print(f"{nave2.nombre} operativo?: {nave2.es_operativo()}\n")
+
+        # Mostrar capacidades
+        print(f"Capacidad total de {nave1.nombre}: {nave1.get_capacidad()}")
+        print(f"Capacidad total de {estacion.nombre}: {estacion.get_capacidad()}\n")
+
+        # Vender repuesto y reabastecer
+        print(f"Vendiendo 1 unidad de {repuesto2.nombre}")
+        valor_venta = almacen.vender_repuesto("Escudo Y", 1)
+        print(f"Valor obtenido: {valor_venta}")
+        print(f"Stock después de venta: {repuesto2.get_cantidad()} unidades")
+        almacen.reabastecer_repuesto("Escudo Y", 5)
+        print(f"Stock después de reabastecer 5 unidades: {repuesto2.get_cantidad()} unidades\n")
+
+        # Bajas de usuarios, unidades y almacenes
+        imperio.baja_usuario(comandante)
+        imperio.baja_unidad_combate(nave2)
+        imperio.baja_almacen(almacen)
+        print("Después de bajas:")
+        print("Usuarios:")
+        imperio.listar_usuarios()
+        print("Unidades de combate:")
+        imperio.listar_unidades_combate()
+        print("Almacenes:")
+        imperio.listar_almacenes()
+
+    except Exception as e:
+        print("Error demo:", e)
+
+if __name__ == "__main__":
+    demo()
