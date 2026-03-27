@@ -119,7 +119,7 @@ class EstacionEspacial(Nave, DatosCapacidad):
         return Nave.__str__(self) + f"\nTripulacion: {self.tripulacion} \nPasaje: {self.pasaje} \nUbicacion: {self.ubicacion}"
 
     def get_ubicacion(self):
-        return self.ubicacion
+        return self.ubicacion.name
     
     def set_ubicacion(self, ubicacion : Ubicacion):
         self.ubicacion = ubicacion
@@ -456,7 +456,7 @@ def demo():
         # Operario gestiona stock (elimina repuesto3 porque cantidad=0)
         operario.gestionar_stock(almacen)
         print("Stock después de gestión de operario:")
-        almacen.obtencion_repuestos
+        almacen.obtencion_repuestos()
         print()
 
         # Probar añadir y quitar piezas en nave1
@@ -494,6 +494,15 @@ def demo():
         print(f"Capacidad total de {estacion.nombre}: {estacion.get_capacidad()}\n")
 
         # Bajas de usuarios, unidades y almacenes
+        print("Antes de bajas:")
+        print("Usuarios:")
+        imperio.listar_usuarios()
+        print("Unidades de combate:")
+        imperio.listar_unidades_combate()
+        print("Almacenes:")
+        imperio.listar_almacenes()
+        print()
+        
         imperio.baja_usuario(comandante)
         imperio.baja_unidad_combate(nave2)
         imperio.baja_almacen(almacen)
