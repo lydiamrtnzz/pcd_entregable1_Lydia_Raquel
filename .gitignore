@@ -1,0 +1,52 @@
+# Bytecode de Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Archivos de entorno virtual
+venv/
+env/
+ENV/
+.venv/
+.env/
+
+# Archivos de configuración del entorno
+*.env
+*.env.*
+
+# Archivos de log
+*.log
+
+# Archivos de bases de datos locales
+*.sqlite3
+
+# Archivos de configuración del sistema operativo
+.DS_Store
+Thumbs.db
+
+# Configuraciones de IDEs
+.vscode/
+.idea/
+
+# Archivos de test y cobertura
+htmlcov/
+.tox/
+.nox/
+.coverage
+coverage.xml
+.cache
+.pytest_cache/
+
+# Distribuciones y paquetes generados
+build/
+dist/
+*.egg-info/
+*.egg
+.eggs/
+
+# Archivos generados por Jupyter Notebook
+.ipynb_checkpoints/
+
+# Otros archivos temporales
+*.bak
+*.tmp
