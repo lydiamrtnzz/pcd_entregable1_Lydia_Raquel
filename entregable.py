@@ -272,6 +272,10 @@ class Almacen:
     def listar_repuestos(self):
         print(f"La lista de repuestos en el almacén {self.id_almacen} es: {', '.join(r.nombre for r in self.get_catalogo())}")
 
+    def obtencion_repuestos(self):
+        for r in self.get_catalogo():
+            print(f"{r.nombre}: {r.get_cantidad()} unidades, Valor total: {r.valor_total_stock()}")
+
 
 class Usuario(ABC):
     def __init__(self, nombre:str, id_usuario:int):
@@ -423,8 +427,7 @@ def demo():
 
         # Listar repuestos con stock y valor total
         print("Repuestos en el almacén (cantidad y valor total):")
-        for r in almacen.catalogo:
-            print(f"{r.nombre}: {r.get_cantidad()} unidades, Valor total: {r.valor_total_stock()}")
+        almacen.obtencion_repuestos()
         print()
 
         # Crear unidades de combate
@@ -447,15 +450,13 @@ def demo():
         except ValueError as e:
             print("Error al adquirir repuesto:", e)
         print("Stock después de adquisiciones del comandante:")
-        for r in almacen.catalogo:
-            print(f"{r.nombre}: {r.get_cantidad()} unidades")
+        almacen.obtencion_repuestos()
         print()
 
         # Operario gestiona stock (elimina repuesto3 porque cantidad=0)
         operario.gestionar_stock(almacen)
         print("Stock después de gestión de operario:")
-        for r in almacen.catalogo:
-            print(f"{r.nombre}: {r.get_cantidad()} unidades")
+        almacen.obtencion_repuestos
         print()
 
         # Probar añadir y quitar piezas en nave1
