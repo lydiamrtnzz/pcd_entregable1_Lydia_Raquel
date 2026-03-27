@@ -262,6 +262,11 @@ class Almacen:
         else:
             self.catalogo.remove(repuesto)
 
+    def disminuir_cantidad_repuesto(self, repuesto: Repuesto, cantidad: int):
+        if not isinstance(repuesto, Repuesto):
+            raise ValueError('El objeto proporcionado no es un repuesto válido. Debe ser una instancia de la clase Repuesto.')
+        repuesto.disminuir_cantidad(cantidad)
+
     def get_catalogo(self):
         return self.catalogo
 
