@@ -1,4 +1,4 @@
-from entregable_bueno import *
+from entregable import *
 import pytest
 
 # vamos a crear fixture que es una función que crea un objeto, que vamos a estar 
