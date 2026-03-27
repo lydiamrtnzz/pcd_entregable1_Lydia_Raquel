@@ -19,7 +19,9 @@ class Estado(Enum):
 
 # CLASE UNIDAD DE COMBATE 
 # Clase abstracta que representa una unidad de combate del imperio.
-# Sirve como clase base para todas las naves de combate (como NaveEstelar, CazaEstelar),
+# Sirve como clase base para todas las naves de combate del imperio
+# Decidimos implementarla como abstracta, para forzar a que no se pueda instanciar. 
+# Aunque no encontramos métodos comunes en todos los hijos y por ello no definimos métodos abstractos
 
 class UnidadCombate(ABC):
     def __init__(self, id_combate:str, clave:int):
@@ -81,9 +83,13 @@ class UnidadCombate(ABC):
 # CLASE NAVE 
 # Se trata de una clase abstracta que representa una nave del imperio
 # Esta clase hereda de UnidadCombate, por lo tanto, al heredar va a tomar sus atributos (nombre y piezas)
+# Decidimos implementarla como abstracta, para forzar a que no se pueda instanciar. 
+# Aunque no encontramos métodos comunes en todos los hijos y por ello no definimos métodos abstractos
 
 class Nave(UnidadCombate, ABC):
     def __init__(self, id_combate:str, clave:int, nombre:str, piezas:list[str] = None):
+        
+        # Llamamos a la clase padre son super() para heredar sus atributos
         super().__init__(id_combate, clave)
 
         if not nombre:
@@ -117,6 +123,13 @@ class Nave(UnidadCombate, ABC):
     def vaciar_piezas(self):
         self.piezas.clear()
 
+# La clase DatosCapacidad se implementa para refactorizar el código, 
+# ya que tanto EstacionEspacial como NaveEstelar comparten atributos y métodos relacionados con la capacidad de tripulación y pasajeros.
+# Esta clase centraliza la gestión de la capacidad, evitando duplicar código en las subclases.
+# Proporciona métodos para:
+# - Obtener la capacidad total (tripulación + pasaje)
+# - Añadir pasajeros de manera controlada
+# - Quitar pasajeros de manera controlada, validando que no se exceda el límite
 
 class DatosCapacidad:
     def __init__(self, tripulacion:int, pasaje:int):
@@ -137,6 +150,11 @@ class DatosCapacidad:
         if cantidad <= 0 or cantidad > self.pasaje:
             raise ValueError("Cantidad inválida")
         self.pasaje -= cantidad
+
+# La clase EstacionEspacial utiliza herencia múltiple con Nave y DatosCapacidad para combinar las funcionalidades de una nave (nombre, piezas, gestión de repuestos)
+# con la gestión de la capacidad de tripulación y pasajeros.
+# En el constructor se llaman explícitamente los constructores de ambos padres.
+# De igual modo hacemos posteriormente con NaveEstelar
 
 class EstacionEspacial(Nave, DatosCapacidad):
     def __init__(self, id_combate:str, clave:int, nombre:str, tripulacion:int, pasaje:int, ubicacion: Ubicacion, piezas:list[str]=None):
@@ -249,6 +267,23 @@ class Repuesto:
     def valor_total_stock(self):
         return self.__cantidad * self.precio
 
+# La relación de composición entre la clase Almacen y la clase Repuesto se representa mediante un atributo en 
+# la clase Almacen que almacena una lista de objetos de tipo Repuesto.
+# Esta relación implica que los repuestos dependen completamente del almacén: no pueden existir de forma independiente. 
+# Por ello, cuando se destruye un objeto de tipo Almacen, también se destruyen los objetos Repuesto que contiene.
+# Decidimos que sea composición, ya que no tiene sentido que los repuestos existan de forma independiente.
+
+# Aunque se modela como composición, en Python los objetos pueden seguir existiendo si existen referencias externas 
+# a ellos (por ejemplo, variables fuera de la clase).
+# Cuando un objeto se elimina de la colección (por ejemplo, al darlo de baja), solo se elimina la referencia que tenía 
+# el contenedor, pero el objeto puede seguir existiendo si hay otras referencias apuntándolo.
+# La destrucción real del objeto solo ocurre cuando no quedan referencias hacia él.
+# En ese momento, el recolector de basura de Python se encarga de eliminarlo automáticamente, 
+# sin necesidad de implementar manualmente un método como __del__.
+# Por tanto, la composición en este caso se entiende a nivel conceptual (de diseño),
+# y no como una restricción estricta impuesta por el lenguaje.
+# De igual modo pasará posteriormente, con la implementación de la clase MiImperio.
+
 class Almacen:
 
     def __init__(self, nombre:str, id_almacen: int, localizacion:str, catalogo: list[Repuesto] = None):
@@ -306,7 +341,8 @@ class Almacen:
         for r in self.get_catalogo():
             print(f"{r.nombre}: {r.get_cantidad()} unidades, Valor total: {r.valor_total_stock()}")
 
-
+# Decidimos implementarla como abstracta, para forzar a que no se pueda instanciar. 
+# Aunque no encontramos métodos comunes en todos los hijos y por ello no definimos métodos abstractos
 class Usuario(ABC):
     def __init__(self, nombre:str, id_usuario:int):
 
@@ -342,7 +378,7 @@ class Operario(Usuario):
 
     def gestionar_stock(self, almacen:Almacen):
         for elem in almacen.get_catalogo().copy():  
-            # Usamos copy() porque si recorremos directamente almacen.catalogo
+            # Usamos copy() porque si recorremos directamente almacen.get_catalogo()
             # y eliminamos elementos durante la iteración, la lista puede cambiar
             # de tamaño y provocar errores o saltarse elementos.
             if not elem.consultar_disponibilidad():
@@ -352,6 +388,15 @@ class Operario(Usuario):
         if almacen.repuesto_en_almacen(repuesto):
             raise ValueError("El repuesto ya existe en el almacén")
         almacen.añadir_repuesto(repuesto)
+
+# Se crea la clase MiImperio para representar el imperio y gestionar sus elementos.
+# Se implementan métodos para añadir y eliminar elementos, ya que MiImperio mantiene una relación de 
+# composición con sus componentes (usuarios, unidades de combate y almacenes).
+# Esta composición se representa mediante atributos en la clase que almacenan listas de objetos de las clases 
+# con las que se relaciona.
+# La composición implica que los elementos dependen del imperio, por lo que no pueden existir de forma independiente.
+# Por ello, cuando se destruye un objeto de tipo MiImperio, también se destruyen los usuarios, las unidades de combate 
+# y los almacenes que contiene.
 
 class MiImperio:
     def __init__(self, nombre: str):
