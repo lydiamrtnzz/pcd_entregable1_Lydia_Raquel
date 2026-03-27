@@ -20,6 +20,10 @@ def repuesto():
     return Repuesto("Motor X", "Kuat Drive Yards", 10, 5000)
 
 @pytest.fixture
+def repuesto2():
+    return Repuesto("Motor J", "Kuat Drive JSON", 7, 100000000)
+
+@pytest.fixture
 def estacion_espacial():
     return EstacionEspacial("ES-01", 1, "Endor Base", 50, 100, Ubicacion.ENDOR)
 
@@ -135,15 +139,18 @@ def test_repuesto_crear(repuesto):
 
 def test_disminuir_cantidad(repuesto):
     repuesto.disminuir_cantidad(3)
-    assert repuesto.get_cantidad() == 2
+    assert repuesto.get_cantidad() == 7 # 10 - 3 = 7 
 
 def test_disminuir_cantidad_error(repuesto):
-    with pytest.raises(ValueError):
-        repuesto.disminuir_cantidad(5)
+    with pytest.raises(ValueError): # si trato de disminuir la cantidad un número mayor a la cantidad actual, debe lanzar una excepción
+        repuesto.disminuir_cantidad(20)
+
+    with pytest.raises(ValueError): # si trato de disminuir la cantidad un número negativo, debe lanzar una excepción
+        repuesto.disminuir_cantidad(-3)
 
 def test_aumentar_cantidad(repuesto):
     repuesto.aumentar_cantidad(5)
-    assert repuesto._Repuesto__cantidad == 15
+    assert repuesto.get_cantidad() == 15
 
 
 # TEST PARA ALMACEN 
@@ -159,10 +166,10 @@ def test_operario_añadir_repuesto(operario, almacen, repuesto):
     assert almacen.repuesto_en_almacen(repuesto)
 
 def test_repuesto_duplicado(operario, almacen, repuesto):
-    operario.añadir_repuesto(almacen, repuesto)
+    operario.gestionar_repuesto(almacen, repuesto)
 
     with pytest.raises(ValueError):
-        operario.añadir_repuesto(almacen, repuesto)
+        operario.gestionar_repuesto(almacen, repuesto)
 
 def test_quitar_repuesto(almacen, repuesto):
 
@@ -179,14 +186,16 @@ def test_buscar_repuesto(almacen, repuesto):
 
     assert resultado == repuesto
 
-def test_gestionar_stock_elimina_sin_stock(operario, almacen, repuesto):
-    operario.añadir_repuesto(almacen, repuesto)
+def test_gestionar_stock_elimina_sin_stock(operario, almacen):
+    r = Repuesto("Motor y", "Kuat Drive Polo", 10, 3500)
+    operario.gestionar_repuesto(almacen, r)
 
-    repuesto.disminuir_cantidad(10)
+    r.disminuir_cantidad(10) # quitamos la misma cantidad que tenemos para que no de una excepcion y podamos probar la funcion gestionar_stock
 
     operario.gestionar_stock(almacen)
+    assert r.get_cantidad() == 0
 
-    assert not almacen.repuesto_en_almacen(repuesto) # compruebo que ya no esta en almacen, si no esta entonces pasa el test
+    assert not almacen.repuesto_en_almacen(r) # compruebo que ya no esta en almacen, si no esta entonces pasa el test
 
 
 # TEST DE OPERARIO
@@ -195,19 +204,19 @@ def test_operario_añadir_repuesto(operario, almacen, repuesto):
     operario.gestionar_repuesto(almacen, repuesto)
     assert almacen.repuesto_en_almacen(repuesto)
 
-def test_gestionar_stock(operario, almacen, repuesto):
+def test_gestionar_stock_no_elimina_con_stock(operario, almacen, repuesto):
     almacen.añadir_repuesto(repuesto)
 
-    operario.gestionar_stock(almacen)
-
-    assert not almacen.repuesto_en_almacen(repuesto)
+    operario.gestionar_stock(almacen)    
+    assert almacen.repuesto_en_almacen(repuesto)
 
 # TEST DE COMANDANTE
-def test_comandante_adquirir_repuesto(comandante, operario, almacen, repuesto, imperio):
+def test_comandante_adquirir_repuesto(comandante, almacen, repuesto2, imperio):
     imperio.alta_almacen(almacen)
-    comandante.adquirir_repuesto(repuesto, 2, imperio)
+    almacen.añadir_repuesto(repuesto2)
+    comandante.adquirir_repuesto(repuesto2, 2, imperio)
 
-    assert repuesto._Repuesto__cantidad == 8
+    assert repuesto2.get_cantidad() == 5
 
 # TEST MIIMPERIO
 def test_alta_usuario(imperio, operario):
