@@ -11,6 +11,12 @@ class Clase(Enum):
     ECLIPSE = 2
     SOBERANO = 3
 
+# vamos a crear una nueva clase, para definir el estado de la nave
+
+class Estado(Enum):
+    OPERATIVA = 1
+    DANADA = 2
+
 class UnidadCombate(ABC):
     def __init__(self, id_combate:str, clave:int):
 
@@ -21,6 +27,27 @@ class UnidadCombate(ABC):
 
         self.id_combate = id_combate
         self.clave = clave
+        self.estado = Estado.OPERATIVA
+
+    # vamos a añadir unos metodos, para ver si estas naves están disponibles o no
+
+    def esta_operativa(self):
+        return self.estado == Estado.OPERATIVA
+
+    def necesita_reparacion(self):
+        return self.estado == Estado.DANADA
+
+    def reparar(self):
+        self.estado = Estado.OPERATIVA
+
+    def cambiar_estado(self):
+        if self.estado == Estado.OPERATIVA:
+            self.estado = Estado.DANADA
+        else:
+            self.reparar()
+
+    def get_estado(self):
+        return self.estado.value
 
     @abstractmethod
     def __str__(self):
