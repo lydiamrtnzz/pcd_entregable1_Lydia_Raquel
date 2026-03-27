@@ -5,6 +5,7 @@ import pytest
 # empleando en los tests, es para no tener que estar repitiendo el código en cada test
 
 # no creamos objetos ni de UnidadCombate, ni de Nave ni de Usuario porque son clases abstractas que no se pueden instanciar
+
 @pytest.fixture
 def nave_estelar():
     # Nave concreta para probar lógica de UnidadCombate y Nave
@@ -45,13 +46,13 @@ def test_estacion_creacion(estacion_espacial):
 
     assert estacion_espacial.tripulacion == 50
     assert estacion_espacial.pasaje == 100
-    assert estacion_espacial.get_ubicacion() == Ubicacion.ENDOR
+    assert estacion_espacial.get_ubicacion() == "ENDOR"
 
 def test_cambiar_ubicacion(estacion_espacial):
 
     estacion_espacial.set_ubicacion(Ubicacion.NEBULOSA_KALIIDA)
 
-    assert estacion_espacial.get_ubicacion() == Ubicacion.NEBULOSA_KALIIDA
+    assert estacion_espacial.get_ubicacion() == "NEBULOSA_KALIIDA"
 
 def test_capacidad_total(estacion_espacial):
     assert estacion_espacial.get_capacidad() == 150
@@ -84,9 +85,9 @@ def test_nave_estelar_piezas(nave_estelar):
 
 def test_reparar(nave_estelar):
 
-    assert nave_estelar.get_estado() == "operativa"
+    assert nave_estelar.get_estado() == "OPERATIVA"
     nave_estelar.cambiar_estado()  # pasa a dañada
-    assert nave_estelar.get_estado() == "dañada"
+    assert nave_estelar.get_estado() == "DANADA"
     assert nave_estelar.necesita_reparacion()
     nave_estelar.reparar()
     assert nave_estelar.esta_operativa()
@@ -113,7 +114,7 @@ def test_vaciar_piezas(nave_estelar):
 
 # TEST PARA CazaEstelar 
 
-def CazaEstelar_dotacion(caza_estelar):
+def test_CazaEstelar_dotacion(caza_estelar):
     caza_estelar.aumentar_dotacion(9)
     assert caza_estelar.get_dotacion() == 14
 
@@ -125,18 +126,12 @@ def CazaEstelar_dotacion(caza_estelar):
     with pytest.raises(ValueError):
         caza_estelar.reducir_dotacion(-4)  
 
-'''def test_caza_operativo():
-    caza = CazaEstelar("C-01", 1, "Faucon", 5)
-    assert caza.es_operativo() == True
-    caza.reducir_dotacion(5)
-    assert caza.es_operativo() == False'''
-
 # TEST PARA REPUESTO 
 
 def test_repuesto_crear(repuesto):
-    assert repuesto.get_cantidad() == 5
+    assert repuesto.get_cantidad() == 10
     assert repuesto.consultar_disponibilidad() == True
-    assert repuesto.get_precio() == 1000
+    assert repuesto.get_precio() == 5000
 
 def test_disminuir_cantidad(repuesto):
     repuesto.disminuir_cantidad(3)
@@ -155,12 +150,12 @@ def test_aumentar_cantidad(repuesto):
 
 def test_almacen_creacion(almacen):
 
-    assert almacen.nombre == "Central"
-    assert almacen.localizacion == "Endor"
+    assert almacen.nombre == "Almacén Imperial"
+    assert almacen.localizacion == "Coruscant"
     assert almacen.catalogo == []
 
 def test_operario_añadir_repuesto(operario, almacen, repuesto):
-    operario.añadir_repuesto(almacen, repuesto)
+    operario.gestionar_repuesto(almacen, repuesto)
     assert almacen.repuesto_en_almacen(repuesto)
 
 def test_repuesto_duplicado(operario, almacen, repuesto):
@@ -187,7 +182,7 @@ def test_buscar_repuesto(almacen, repuesto):
 def test_gestionar_stock_elimina_sin_stock(operario, almacen, repuesto):
     operario.añadir_repuesto(almacen, repuesto)
 
-    repuesto.disminuir_cantidad(1)
+    repuesto.disminuir_cantidad(10)
 
     operario.gestionar_stock(almacen)
 
@@ -197,7 +192,7 @@ def test_gestionar_stock_elimina_sin_stock(operario, almacen, repuesto):
 # TEST DE OPERARIO
 
 def test_operario_añadir_repuesto(operario, almacen, repuesto):
-    operario.añadir_repuesto(almacen, repuesto)
+    operario.gestionar_repuesto(almacen, repuesto)
     assert almacen.repuesto_en_almacen(repuesto)
 
 def test_gestionar_stock(operario, almacen, repuesto):
@@ -208,10 +203,9 @@ def test_gestionar_stock(operario, almacen, repuesto):
     assert not almacen.repuesto_en_almacen(repuesto)
 
 # TEST DE COMANDANTE
-def test_comandante_adquirir_repuesto(comandante, operario, almacen, repuesto):
-    operario.añadir_repuesto(almacen, repuesto)
-
-    comandante.adquirir_repuesto(repuesto, 2, almacen)
+def test_comandante_adquirir_repuesto(comandante, operario, almacen, repuesto, imperio):
+    imperio.alta_almacen(almacen)
+    comandante.adquirir_repuesto(repuesto, 2, imperio)
 
     assert repuesto._Repuesto__cantidad == 8
 
@@ -219,15 +213,13 @@ def test_comandante_adquirir_repuesto(comandante, operario, almacen, repuesto):
 def test_alta_usuario(imperio, operario):
     imperio.alta_usuario(operario)
 
-    assert operario.id_usuario in imperio.usuarios
+    assert operario in imperio.usuarios
 
 def test_alta_almacen(imperio, almacen):
     imperio.alta_almacen(almacen)
 
-    assert almacen.id_almacen in imperio.almacenes
+    assert almacen in imperio.almacenes
 
-def test_alta_unidad_combate(imperio):
-
+def test_alta_unidad_combate(imperio, nave_estelar):
     imperio.alta_unidad_combate(nave_estelar)
-
-    assert nave_estelar.id_combate in imperio.unidades_combate
+    assert nave_estelar in imperio.unidades_combate
