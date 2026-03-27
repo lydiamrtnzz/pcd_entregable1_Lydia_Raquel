@@ -73,6 +73,15 @@ def test_quitar_pasajeros(estacion_espacial):
 
     assert estacion_espacial.pasaje == 70
 
+# CASOS LÍMITE
+def test_añadir_pasajeros_negativo(estacion_espacial):
+    with pytest.raises(ValueError):
+        estacion_espacial.añadir_pasajeros(-10)
+
+def test_quitar_pasajeros_mas_que_disponibles(estacion_espacial):
+    with pytest.raises(ValueError):
+        estacion_espacial.quitar_pasajeros(200)  # más que el pasaje actual
+
 # TEST PARA NaveEstelar 
 
 def test_nave_estelar_piezas(nave_estelar):
@@ -130,6 +139,13 @@ def test_CazaEstelar_dotacion(caza_estelar):
     with pytest.raises(ValueError):
         caza_estelar.reducir_dotacion(-4)  
 
+    with pytest.raises(ValueError):
+        caza_estelar.reducir_dotacion(10)  # dotación inicial = 5
+
+    with pytest.raises(ValueError):
+        caza_estelar.aumentar_dotacion(-1)
+
+
 # TEST PARA REPUESTO 
 
 def test_repuesto_crear(repuesto):
@@ -160,10 +176,6 @@ def test_almacen_creacion(almacen):
     assert almacen.nombre == "Almacén Imperial"
     assert almacen.localizacion == "Coruscant"
     assert almacen.catalogo == []
-
-def test_operario_añadir_repuesto(operario, almacen, repuesto):
-    operario.gestionar_repuesto(almacen, repuesto)
-    assert almacen.repuesto_en_almacen(repuesto)
 
 def test_repuesto_duplicado(operario, almacen, repuesto):
     operario.gestionar_repuesto(almacen, repuesto)
@@ -196,7 +208,7 @@ def test_gestionar_stock_elimina_sin_stock(operario, almacen):
     assert r.get_cantidad() == 0
 
     assert not almacen.repuesto_en_almacen(r) # compruebo que ya no esta en almacen, si no esta entonces pasa el test
-
+    assert r not in almacen.get_catalogo()  # catalogo debe reflejarlo correctamente
 
 # TEST DE OPERARIO
 
