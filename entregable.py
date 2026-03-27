@@ -17,6 +17,10 @@ class Estado(Enum):
     OPERATIVA = 1
     DANADA = 2
 
+# CLASE UNIDAD DE COMBATE 
+# Clase abstracta que representa una unidad de combate del imperio.
+# Sirve como clase base para todas las naves de combate (como NaveEstelar, CazaEstelar),
+
 class UnidadCombate(ABC):
     def __init__(self, id_combate:str, clave:int):
 
@@ -25,32 +29,55 @@ class UnidadCombate(ABC):
         if clave <= 0:
             raise ValueError("La clave debe ser positiva")
 
-        self.id_combate = id_combate
-        self.clave = clave
-        self.estado = Estado.OPERATIVA
+        self.id_combate = id_combate # identificador único de la unidad de combate
+        self.clave = clave # clave de la unidad
+        self.estado = Estado.OPERATIVA # Estado inicial de la unidad (OPERATIVA)
 
     # vamos a añadir unos metodos, para ver si estas naves están disponibles o no
 
     def esta_operativa(self):
+
+        # Comprueba si la unidad está operativa. 
+        # Donde va a devolver un booleano --> True si la unidad está operativa y False en caso contrario.
+        
         return self.estado == Estado.OPERATIVA
 
     def necesita_reparacion(self):
+
+        # Comprueba si la unidad necesita reparación
+        # devuelve un booleano --> True si la unidad está dañada, False si está operativa
+
         return self.estado == Estado.DANADA
 
     def reparar(self):
+
+        #  Repara la unidad, cambiando su estado a OPERATIVA.
+
         self.estado = Estado.OPERATIVA
 
     def cambiar_estado(self):
+
+        # Cambia el estado de la unidad.
+        # - Si está OPERATIVA, pasa a DANADA.
+        # - Si está DANADA, se repara y vuelve a OPERATIVA.
+
         if self.estado == Estado.OPERATIVA:
             self.estado = Estado.DANADA
         else:
             self.reparar()
 
     def get_estado(self):
+
+        #  Devuelve el estado actual de la unidad como string ('OPERATIVA' o 'DANADA')
+
         return self.estado.name
 
     def __str__(self):
+
+        # Representación en cadena de la unidad, mostrando id y clave
+
         return f"Id: {self.id_combate} \nClave: {self.clave}"
+       
 
 class Nave(UnidadCombate, ABC):
     def __init__(self, id_combate:str, clave:int, nombre:str, piezas:list[str] = None):
