@@ -1,5 +1,5 @@
 from enum import Enum
-from abc import ABC, abstractmethod
+from abc import ABC
 
 class Ubicacion(Enum):
     ENDOR = 1
@@ -47,9 +47,8 @@ class UnidadCombate(ABC):
             self.reparar()
 
     def get_estado(self):
-        return self.estado.value
+        return self.estado.name
 
-    @abstractmethod
     def __str__(self):
         return f"Id: {self.id_combate} \nClave: {self.clave}"
 
@@ -273,6 +272,7 @@ class Almacen:
     def listar_repuestos(self):
         print(f"La lista de repuestos en el almacén {self.id_almacen} es: {', '.join(r.nombre for r in self.get_catalogo())}")
 
+
 class Usuario(ABC):
     def __init__(self, nombre:str, id_usuario:int):
 
@@ -365,7 +365,7 @@ class MiImperio:
         if not isinstance(unidad_combate, UnidadCombate):
             raise ValueError('El objeto proporcionado no es una Unidad de Combate válida. Debe ser una instancia de la clase UnidadCombate.')
         if unidad_combate not in self.unidades_combate:
-            raise ValueError(f'La Unidad de Combate "{unidad_combate.nombre}" no existe en el imperio.')
+            raise ValueError(f'La Unidad de Combate "{unidad_combate.id_combate}" no existe en el imperio.')
         else:
             self.unidades_combate.remove(unidad_combate)
 
@@ -412,9 +412,9 @@ def demo():
         # Crear almacén y añadir repuestos
         almacen = Almacen("Central", 1, "Endor")
         try:
-            operario.añadir_repuesto(almacen, repuesto1)
-            operario.añadir_repuesto(almacen, repuesto2)
-            operario.añadir_repuesto(almacen, repuesto3)
+            operario.gestionar_repuesto(almacen, repuesto1)
+            operario.gestionar_repuesto(almacen, repuesto2)
+            operario.gestionar_repuesto(almacen, repuesto3)
         except ValueError as e:
             print("Error al añadir repuesto:", e)
 
