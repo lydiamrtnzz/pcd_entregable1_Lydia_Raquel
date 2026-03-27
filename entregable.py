@@ -295,10 +295,10 @@ class Comandante(Usuario):
     def consultar_almacen(self, almacen: Almacen):
         almacen.listar_repuestos()
 
-    def adquirir_repuesto(self, repuesto, cantidad, imperio):
-        for almacen in imperio.almacenes:
+    def adquirir_repuesto(self, repuesto: Repuesto, cantidad: int, imperio):
+        for almacen in imperio.get_almacenes():
             if almacen.repuesto_en_almacen(repuesto):
-                repuesto.disminuir_cantidad(cantidad)
+                almacen.disminuir_cantidad_repuesto(repuesto, cantidad)
                 return
         raise ValueError("No encontrado en ningún almacén")
     
@@ -307,14 +307,14 @@ class Operario(Usuario):
         super().__init__(nombre, id_usuario)   
 
     def gestionar_stock(self, almacen:Almacen):
-        for elem in almacen.catalogo.copy():  
+        for elem in almacen.get_catalogo().copy():  
             # Usamos copy() porque si recorremos directamente almacen.catalogo
             # y eliminamos elementos durante la iteración, la lista puede cambiar
             # de tamaño y provocar errores o saltarse elementos.
             if not elem.consultar_disponibilidad():
                 almacen.quitar_repuesto(elem)
 
-    def añadir_repuesto(self, almacen: Almacen, repuesto: Repuesto):
+    def gestionar_repuesto(self, almacen: Almacen, repuesto: Repuesto):
         if almacen.repuesto_en_almacen(repuesto):
             raise ValueError("El repuesto ya existe en el almacén")
         almacen.añadir_repuesto(repuesto)
@@ -349,6 +349,9 @@ class MiImperio:
             raise ValueError(f'El almacén "{almacen.nombre}" ya existe en el imperio.')
         else:
             self.almacenes.append(almacen)
+
+    def get_almacenes(self):
+        return self.almacenes
 
     def baja_usuario(self, usuario: Usuario):
         if not isinstance(usuario, Usuario):
