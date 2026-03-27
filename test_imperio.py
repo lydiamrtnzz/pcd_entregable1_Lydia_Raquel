@@ -244,3 +244,35 @@ def test_alta_almacen(imperio, almacen):
 def test_alta_unidad_combate(imperio, nave_estelar):
     imperio.alta_unidad_combate(nave_estelar)
     assert nave_estelar in imperio.unidades_combate
+
+# Test flujo completo
+
+def test_flujo_completo(imperio, almacen, operario, comandante):
+    # 1. Alta de almacén y usuarios
+    imperio.alta_almacen(almacen)
+    imperio.alta_usuario(operario)
+    imperio.alta_usuario(comandante)
+
+    # 2. Crear repuestos
+    r1 = Repuesto("Motor A", "Kuat", 10, 5000)
+    r2 = Repuesto("Motor B", "Kuat", 5, 10000)
+
+    # 3. Operario añade repuestos al almacén
+    operario.gestionar_repuesto(almacen, r1)
+    operario.gestionar_repuesto(almacen, r2)
+
+    # Comprobamos que están en el almacén
+    assert almacen.repuesto_en_almacen(r1)
+    assert almacen.repuesto_en_almacen(r2)
+
+    # 4. Comandante adquiere algunos repuestos
+    comandante.adquirir_repuesto(r1, 3, imperio)
+    assert r1.get_cantidad() == 7  # 10 - 3 = 7
+
+    # 5. Disminuimos a 0 un repuesto y gestionamos stock
+    r2.disminuir_cantidad(5)
+    operario.gestionar_stock(almacen)
+
+    # Comprobamos que se eliminó correctamente del almacén
+    assert not almacen.repuesto_en_almacen(r2)
+    assert r2 not in almacen.get_catalogo()
