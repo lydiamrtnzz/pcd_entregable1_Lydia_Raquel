@@ -1,4 +1,5 @@
 from enum import Enum
+from abc import ABC, abstractmethod
 
 class Ubicacion(Enum):
     ENDOR = 1
@@ -10,7 +11,7 @@ class Clase(Enum):
     ECLIPSE = 2
     SOBERANO = 3
 
-class UnidadCombate():
+class UnidadCombate(ABC):
     def __init__(self, id_combate:str, clave:int):
 
         if not id_combate:
@@ -21,10 +22,11 @@ class UnidadCombate():
         self.id_combate = id_combate
         self.clave = clave
 
+    @abstractmethod
     def __str__(self):
         return f"Id: {self.id_combate} \nClave: {self.clave}"
 
-class Nave(UnidadCombate):
+class Nave(UnidadCombate, ABC):
     def __init__(self, id_combate:str, clave:int, nombre:str, piezas:list[str] = None):
         super().__init__(id_combate, clave)
 
@@ -239,7 +241,7 @@ class Almacen:
     def listar_repuestos(self):
         print(f"La lista de repuestos en el almacén {self.id_almacen} es: {', '.join(r.nombre for r in self.get_catalogo())}")
 
-class Usuario:
+class Usuario(ABC):
     def __init__(self, nombre:str, id_usuario:int):
 
         if not nombre:
