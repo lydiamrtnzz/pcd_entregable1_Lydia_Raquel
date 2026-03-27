@@ -78,6 +78,9 @@ class UnidadCombate(ABC):
 
         return f"Id: {self.id_combate} \nClave: {self.clave}"
        
+# CLASE NAVE 
+# Se trata de una clase abstracta que representa una nave del imperio
+# Esta clase hereda de UnidadCombate, por lo tanto, al heredar va a tomar sus atributos (nombre y piezas)
 
 class Nave(UnidadCombate, ABC):
     def __init__(self, id_combate:str, clave:int, nombre:str, piezas:list[str] = None):
