@@ -313,6 +313,10 @@ class CazaEstelar(Nave):
             raise ValueError("Cantidad inválida")
         self.dotacion -= cantidad
 
+# CLASE REPUESTO
+# Clase que representa un repuesto dentro del sistema del imperio y además a diferencia de las otras clases
+# va a tener un atributo privado, que va a ser "cantidad"
+
 class Repuesto:
     def __init__(self, nombre, proveedor, cantidad, precio):
 
@@ -327,13 +331,17 @@ class Repuesto:
         
         self.nombre = nombre
         self.proveedor = proveedor
-        self.__cantidad = cantidad
+        self.__cantidad = cantidad # atributo privado
         self.precio = precio
     
     def __str__(self):
         return f'Repuesto: {self.nombre} \nCantidad: {self.__cantidad} \nProveedor: {self.proveedor} \nPrecio: {self.precio}'
 
     def disminuir_cantidad(self, cantidad):
+
+        # reduce la cantidad disponible del repuesto, donde cantidad es el número de cantidades a restar
+        # donde devuelve una excepción si la cantidad es inválida o supera el stock disponible
+
         if cantidad <= 0:
             raise ValueError("Cantidad inválida")
         if cantidad > self.__cantidad:
@@ -341,25 +349,44 @@ class Repuesto:
         self.__cantidad -= cantidad
             
     def aumentar_cantidad(self, cantidad):
+
+        # Aumenta la cantidad disponible del repuesto
+
         if cantidad <= 0:
             raise ValueError("Cantidad inválida")
         self.__cantidad += cantidad
 
     def consultar_disponibilidad(self):
+
+        # ndica si el repuesto está disponible en el almacén, donde devuelve un booleano 
+        # True si hay stock, False en caso contrario
+
         return self.__cantidad > 0
 
     def get_cantidad(self):
+
+        # Devuelve la cantidad disponible del repuesto
+
         return self.__cantidad
     
     def get_precio(self):
+
+        #  Devuelve el precio unitario del repuesto
+
         return self.precio
 
     def set_precio(self, precio):
+
+        # Modifica el precio del repuesto
+
         if precio <= 0:
             raise ValueError("Precio inválido")
         self.precio = precio
 
     def valor_total_stock(self):
+
+        # Calcula el valor total del stock disponible de este repuesto
+
         return self.__cantidad * self.precio
 
 # La relación de composición entre la clase Almacen y la clase Repuesto se representa mediante un atributo en 
