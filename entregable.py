@@ -537,20 +537,31 @@ class Comandante(Usuario):
                 almacen.disminuir_cantidad_repuesto(repuesto, cantidad)
                 return
         raise ValueError("No encontrado en ningún almacén")
-    
+
+# CLASE OPERARIO 
+# Clase que representa a un usuario con rol de operario dentro del imperio
+# Hereda de Usuario 
+
 class Operario(Usuario):
     def __init__(self, nombre, id_usuario):
         super().__init__(nombre, id_usuario)   
 
     def gestionar_stock(self, almacen:Almacen):
+
+        # Gestiona el stock del almacén eliminando aquellos repuestos que no tienen disponibilidad (cantidad = 0)
+
         for elem in almacen.get_catalogo().copy():  
-            # Usamos copy() porque si recorremos directamente almacen.get_catalogo()
+            # Usamos copy() porque si recorremos directamente almacen.catalogo
             # y eliminamos elementos durante la iteración, la lista puede cambiar
             # de tamaño y provocar errores o saltarse elementos.
             if not elem.consultar_disponibilidad():
                 almacen.quitar_repuesto(elem)
 
     def gestionar_repuesto(self, almacen: Almacen, repuesto: Repuesto):
+
+        # Añade un nuevo repuesto al almacén
+        # Va a devolver un  ValueError, si el repuesto ya existe en el almacén
+
         if almacen.repuesto_en_almacen(repuesto):
             raise ValueError("El repuesto ya existe en el almacén")
         almacen.añadir_repuesto(repuesto)
