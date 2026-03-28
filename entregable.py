@@ -198,26 +198,39 @@ class DatosCapacidad:
             raise ValueError("Cantidad inválida")
         self.pasaje -= cantidad
 
-
-# La clase EstacionEspacial utiliza herencia múltiple con Nave y DatosCapacidad para combinar las funcionalidades de una nave (nombre, piezas, gestión de repuestos)
+# CLASE ESTACION ESPACIAL 
+# Clase que representa una estación espacial del imperio.
+# La cual Hereda de --> Nave: para poder gestionar piezas y atributos de combate y de 
+# DatosCapacidad: para manejar la capacidad de tripulación y pasajeros, se trata de una herencia múltiple 
+# que permite combinar funcionalidad de ambas clases, por lo tanrro utiliza herencia múltiple 
 # con la gestión de la capacidad de tripulación y pasajeros.
 # En el constructor se llaman explícitamente los constructores de ambos padres.
 # De igual modo hacemos posteriormente con NaveEstelar
 
 class EstacionEspacial(Nave, DatosCapacidad):
+
     def __init__(self, id_combate:str, clave:int, nombre:str, tripulacion:int, pasaje:int, ubicacion: Ubicacion, piezas:list[str]=None):
+        
         # Llamamos a los dos padres
         Nave.__init__(self, id_combate, clave, nombre, piezas)
         DatosCapacidad.__init__(self, tripulacion, pasaje)
-        self.ubicacion = ubicacion
+
+        self.ubicacion = ubicacion # ubicación de la nave 
 
     def __str__(self):
         return Nave.__str__(self) + f"\nTripulacion: {self.tripulacion} \nPasaje: {self.pasaje} \nUbicacion: {self.ubicacion}"
 
     def get_ubicacion(self):
+
+        # Devuelve la ubicación de la estación como string (nombre del Enum)
+
         return self.ubicacion.name
     
     def set_ubicacion(self, ubicacion : Ubicacion):
+
+        # Modifica la ubicación de la estación
+        # donde aqui ubicación va a ser la nueva ubicación de la nave 
+
         self.ubicacion = ubicacion
     
 
