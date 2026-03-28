@@ -233,20 +233,30 @@ class EstacionEspacial(Nave, DatosCapacidad):
 
         self.ubicacion = ubicacion
     
+# CLASE NAVE ESTELAR 
+# es el mismo caso que la anerior, se trata de una herencia múltiple entre Nave y DatosCapacidad
 
 class NaveEstelar(Nave, DatosCapacidad):
+
     def __init__(self, id_combate:str, clave:int, nombre:str, tripulacion:int, pasaje:int, clase: Clase, piezas:list[str]=None):
+        
         Nave.__init__(self, id_combate, clave, nombre, piezas)
         DatosCapacidad.__init__(self, tripulacion, pasaje)
-        self.clase = clase
+
+        self.clase = clase # tipo de nave estelar
     
     def __str__(self):
         return  Nave.__str__(self) + f", tripulacion: {self.tripulacion}, pasaje: {self.pasaje}, clase: {self.clase}"
 
     def get_clase(self):
+
+        # Devuelve la clase (tipo --> Enum Clase) de la nave estelar
+
         return self.clase
     
     def set_clase(self, clase : Clase):
+
+        # Modifica la clase (tipo --> Enum Clase) de la nave estelar
         self.clase = clase 
 
 class CazaEstelar(Nave):
