@@ -512,15 +512,26 @@ class Usuario(ABC):
     def __str__(self):
         return f"Nombre: {self.nombre}"
 
+# CLASE COMANDANTE 
+# Clase que representa a un usuario con rol de comandante dentro del imperio.
+# Hereda de Usuario 
+
 class Comandante(Usuario):
     
     def __init__(self, nombre, id_usuario):
         super().__init__(nombre, id_usuario)
 
     def consultar_almacen(self, almacen: Almacen):
+
+        # Permite al comandante consultar los repuestos disponibles en un almacén
+
         almacen.listar_repuestos()
 
     def adquirir_repuesto(self, repuesto: Repuesto, cantidad: int, imperio):
+
+        # Permite al comandante adquirir un repuesto desde cualquiera de los almacenes del imperio
+        # Va a devolver un ValueError si el repuesto no se encuentra en ningún almacén
+
         for almacen in imperio.get_almacenes():
             if almacen.repuesto_en_almacen(repuesto):
                 almacen.disminuir_cantidad_repuesto(repuesto, cantidad)
