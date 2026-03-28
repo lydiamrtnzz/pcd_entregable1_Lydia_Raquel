@@ -87,41 +87,67 @@ class UnidadCombate(ABC):
 # Aunque no encontramos métodos comunes en todos los hijos y por ello no definimos métodos abstractos
 
 class Nave(UnidadCombate, ABC):
+
     def __init__(self, id_combate:str, clave:int, nombre:str, piezas:list[str] = None):
-        
-        # Llamamos a la clase padre son super() para heredar sus atributos
-        super().__init__(id_combate, clave)
+       
+        super().__init__(id_combate, clave)# Inicializa atributos heredados de UnidadCombate
 
         if not nombre:
             raise ValueError("El nombre de la nave no puede estar vacío")
         
-        self.nombre = nombre
-        self.piezas = piezas if piezas else []
+        self.nombre = nombre # nombre de la nave
+        self.piezas = piezas if piezas else [] # lista inicial de piezas de la nave
 
     def __str__(self):
+
+        # Devuelve la representación en cadena de la nave, incluyendo los datos heredados
+        # y su nombre y piezas actuales.
+
         return  super().__str__() + f"\nNombre: {self.nombre} \nPiezas: {', '.join(self.piezas)}"
 
     def añadir_piezas(self, pieza_repuesto):
+
+        # este método lo que hace es añadir una pieza a la nave, donde pieza_repuesto es el nombre de la pieza añadida
+        # nos va a devolver una excepción si la pieza ya existe en la nave 
+
         if pieza_repuesto in self.piezas:
             raise ValueError("Pieza ya incluida")
         self.piezas.append(pieza_repuesto)
 
     def quitar_piezas(self, pieza_repuesto):
+
+        # elimina una pieza de la nave, donde indicamos el nombre de la pieza que queremos quitar,
+        # da una excepción si la pieza no está en la nave 
+
         if pieza_repuesto not in self.piezas:
             raise ValueError("Pieza no disponible")
         self.piezas.remove(pieza_repuesto)
 
     def listar_piezas(self):
+
+        # Muestra por pantalla todas las piezas de la nave
+
         print(f"La lista de piezas de la nave {self.nombre} es: {', '.join(self.piezas)}") 
 
     def tiene_pieza(self, pieza):
+
+        # Comprueba si la nave tiene una pieza determinada y devuelve un  booleano
+        # donde ees True si la pieza está en la nave y False si no.
+
         return pieza in self.piezas
 
     def numero_piezas(self):
+
+        # Devuelve el número total de piezas que tiene la nave
+
         return len(self.piezas)
 
     def vaciar_piezas(self):
+
+        # Elimina todas las piezas de la nave, dejando la lista vacía
+
         self.piezas.clear()
+
 
 # La clase DatosCapacidad se implementa para refactorizar el código, 
 # ya que tanto EstacionEspacial como NaveEstelar comparten atributos y métodos relacionados con la capacidad de tripulación y pasajeros.
