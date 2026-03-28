@@ -409,7 +409,7 @@ class Repuesto:
 # De igual modo pasará posteriormente, con la implementación de la clase MiImperio.
 
 class Almacen:
-      
+
     def __init__(self, nombre:str, id_almacen: int, localizacion:str, catalogo: list[Repuesto] = None):
         
         if not nombre:
@@ -492,9 +492,12 @@ class Almacen:
         for r in self.get_catalogo():
             print(f"{r.nombre}: {r.get_cantidad()} unidades, Valor total: {r.valor_total_stock()}")
 
+# CLASE USUARIO 
 
 # Decidimos implementarla como abstracta, para forzar a que no se pueda instanciar. 
 # Aunque no encontramos métodos comunes en todos los hijos y por ello no definimos métodos abstractos
+# Sirve como clase base para otros tipos de usuarios (Comandante y Operario).
+
 class Usuario(ABC):
     def __init__(self, nombre:str, id_usuario:int):
 
@@ -503,8 +506,8 @@ class Usuario(ABC):
         if id_usuario <= 0:
             raise ValueError("El id de usuario debe ser positivo")
     
-        self.nombre = nombre
-        self.id_usuario = id_usuario
+        self.nombre = nombre # nombre del usuario
+        self.id_usuario = id_usuario # identificador único del usuario
         
     def __str__(self):
         return f"Nombre: {self.nombre}"
