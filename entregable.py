@@ -389,6 +389,8 @@ class Repuesto:
 
         return self.__cantidad * self.precio
 
+# CLASE ALMACEN 
+
 # La relación de composición entre la clase Almacen y la clase Repuesto se representa mediante un atributo en 
 # la clase Almacen que almacena una lista de objetos de tipo Repuesto.
 # Esta relación implica que los repuestos dependen completamente del almacén: no pueden existir de forma independiente. 
@@ -407,7 +409,7 @@ class Repuesto:
 # De igual modo pasará posteriormente, con la implementación de la clase MiImperio.
 
 class Almacen:
-
+      
     def __init__(self, nombre:str, id_almacen: int, localizacion:str, catalogo: list[Repuesto] = None):
         
         if not nombre:
@@ -418,21 +420,32 @@ class Almacen:
         self.nombre = nombre
         self.id_almacen = id_almacen
         self.localizacion = localizacion
-        self.catalogo = catalogo if catalogo else []
+        self.catalogo = catalogo if catalogo else [] # lista de objetos Repuesto
 
     def __str__(self):
         return f"Almacen {self.nombre} \nLocalizacion: {self.localizacion}"
 
     def repuesto_en_almacen(self, repuesto):
+
+        # Comprueba si un repuesto está en el catálogo del almacén, donde devuelve un booleano
+        # True si está en el almacén, False en caso contrario
+
         return repuesto in self.catalogo
     
     def buscar_repuesto(self, nombre):
+
+        # Busca un repuesto por su nombre, donde nos va a devolver el repuesto si existe, o None si no se encuentra
+
         for r in self.catalogo:
             if r.nombre == nombre:
                 return r
         return None
     
     def añadir_repuesto(self, repuesto : Repuesto):
+
+        # Añade un repuesto al catálogo del almacén
+        # dvuelve una excepción si el objeto no es válido o ya existe en el catálogo
+
         if not isinstance(repuesto, Repuesto):
             raise ValueError('El objeto proporcionado no es un repuesto válido. Debe ser una instancia de la clase Repuesto.')
         if repuesto in self.catalogo:
@@ -441,6 +454,10 @@ class Almacen:
             self.catalogo.append(repuesto)
 
     def quitar_repuesto(self, repuesto : Repuesto):
+
+        # Elimina un repuesto del catálogo
+        # devuelve un ValueError si el objeto no es válido o no existe en el catálogo
+
         if not isinstance(repuesto, Repuesto):
             raise ValueError('El objeto proporcionado no es un repuesto válido. Debe ser una instancia de la clase Repuesto.')
         if repuesto not in self.catalogo:
@@ -449,19 +466,32 @@ class Almacen:
             self.catalogo.remove(repuesto)
 
     def disminuir_cantidad_repuesto(self, repuesto: Repuesto, cantidad: int):
+        
+        #  Disminuye la cantidad disponible de un repuesto en el almacén
+
         if not isinstance(repuesto, Repuesto):
             raise ValueError('El objeto proporcionado no es un repuesto válido. Debe ser una instancia de la clase Repuesto.')
         repuesto.disminuir_cantidad(cantidad)
 
     def get_catalogo(self):
+
+        # Devuelve el catálogo de repuestos del almacén, donde devuelve una lista de repuestos
+
         return self.catalogo
 
     def listar_repuestos(self):
+
+        # Muestra por pantalla los nombres de todos los repuestos del almacén
+
         print(f"La lista de repuestos en el almacén {self.id_almacen} es: {', '.join(r.nombre for r in self.get_catalogo())}")
 
     def obtencion_repuestos(self):
+
+        # Muestra la información detallada de cada repuesto, es decir, la cantidad disponible y valor total del stock
+
         for r in self.get_catalogo():
             print(f"{r.nombre}: {r.get_cantidad()} unidades, Valor total: {r.valor_total_stock()}")
+
 
 # Decidimos implementarla como abstracta, para forzar a que no se pueda instanciar. 
 # Aunque no encontramos métodos comunes en todos los hijos y por ello no definimos métodos abstractos
