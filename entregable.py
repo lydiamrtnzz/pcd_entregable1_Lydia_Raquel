@@ -566,6 +566,8 @@ class Operario(Usuario):
             raise ValueError("El repuesto ya existe en el almacén")
         almacen.añadir_repuesto(repuesto)
 
+# CLASE MIIMPERIO
+
 # Se crea la clase MiImperio para representar el imperio y gestionar sus elementos.
 # Se implementan métodos para añadir y eliminar elementos, ya que MiImperio mantiene una relación de 
 # composición con sus componentes (usuarios, unidades de combate y almacenes).
@@ -576,13 +578,20 @@ class Operario(Usuario):
 # y los almacenes que contiene.
 
 class MiImperio:
+
     def __init__(self, nombre: str):
+
+        # Inicializa el imperio con un nombre y estructuras vacías
+
         self.nombre = nombre
         self.usuarios = []
         self.unidades_combate = []
         self.almacenes = []
 
     def alta_usuario(self, usuario: Usuario):
+
+        # Añade un usuario al imperio
+
         if not isinstance(usuario, Usuario):
             raise ValueError('El objeto proporcionado no es un Usuario válido. Debe ser una instancia de la clase Usuario.')
         if usuario in self.usuarios:
@@ -591,6 +600,9 @@ class MiImperio:
             self.usuarios.append(usuario)
 
     def alta_unidad_combate(self, unidad_combate):
+
+        # Añade una unidad de combate al imperio
+
         if not isinstance(unidad_combate, UnidadCombate):
             raise ValueError('El objeto proporcionado no es una Unidad de Combate válida. Debe ser una instancia de la clase UnidadCombate.')
         if unidad_combate in self.unidades_combate:
@@ -599,6 +611,9 @@ class MiImperio:
             self.unidades_combate.append(unidad_combate)
 
     def alta_almacen(self, almacen: Almacen):
+
+        # Añade un almacén al imperio
+
         if not isinstance(almacen, Almacen):
             raise ValueError('El objeto proporcionado no es un almacén válido. Debe ser una instancia de la clase Almacen.')
         if almacen in self.almacenes:
@@ -607,9 +622,15 @@ class MiImperio:
             self.almacenes.append(almacen)
 
     def get_almacenes(self):
+
+        # Devuelve la lista de almacenes del imperio
+
         return self.almacenes
 
     def baja_usuario(self, usuario: Usuario):
+
+        # Elimina un usuario del imperio
+
         if not isinstance(usuario, Usuario):
             raise ValueError('El objeto proporcionado no es un Usuario válido. Debe ser una instancia de la clase Usuario.')
         if usuario not in self.usuarios:
@@ -618,6 +639,9 @@ class MiImperio:
             self.usuarios.remove(usuario)
 
     def baja_unidad_combate(self, unidad_combate):
+
+        # Elimina una unidad de combate del imperio
+
         if not isinstance(unidad_combate, UnidadCombate):
             raise ValueError('El objeto proporcionado no es una Unidad de Combate válida. Debe ser una instancia de la clase UnidadCombate.')
         if unidad_combate not in self.unidades_combate:
@@ -626,6 +650,9 @@ class MiImperio:
             self.unidades_combate.remove(unidad_combate)
 
     def baja_almacen(self, almacen: Almacen):
+
+        # Elimina un almacén del imperio
+
         if not isinstance(almacen, Almacen):
             raise ValueError('El objeto proporcionado no es un almacén válido. Debe ser una instancia de la clase Almacen.')
         if almacen not in self.almacenes:
@@ -634,12 +661,21 @@ class MiImperio:
             self.almacenes.remove(almacen)
 
     def listar_usuarios(self):
+
+        # Muestra por pantalla los nombres de todos los usuarios del imperio
+
         print(', '.join(u.nombre for u in self.usuarios))
     
     def listar_unidades_combate(self):
+
+        # Muestra por pantalla los identificadores de todas las unidades de combate
+
         print(', '.join(u.id_combate for u in self.unidades_combate))
 
     def listar_almacenes(self):
+
+        # Muestra por pantalla los nombres de todos los almacenes del imperio
+        
         print(', '.join(a.nombre for a in self.almacenes))
 
 def demo():
