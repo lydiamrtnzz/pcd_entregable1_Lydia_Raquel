@@ -20,6 +20,7 @@ class Estado(Enum):
 # CLASE UNIDAD DE COMBATE 
 # Clase abstracta que representa una unidad de combate del imperio.
 # Sirve como clase base para todas las naves de combate del imperio
+
 # Decidimos implementarla como abstracta, para forzar a que no se pueda instanciar. 
 # Aunque no encontramos métodos comunes en todos los hijos y por ello no definimos métodos abstractos
 
@@ -83,6 +84,7 @@ class UnidadCombate(ABC):
 # CLASE NAVE 
 # Se trata de una clase abstracta que representa una nave del imperio
 # Esta clase hereda de UnidadCombate, por lo tanto, al heredar va a tomar sus atributos (nombre y piezas)
+
 # Decidimos implementarla como abstracta, para forzar a que no se pueda instanciar. 
 # Aunque no encontramos métodos comunes en todos los hijos y por ello no definimos métodos abstractos
 
@@ -148,6 +150,9 @@ class Nave(UnidadCombate, ABC):
 
         self.piezas.clear()
 
+# CLASE DATOS CAPACIDAD
+# Clase que representa la capacidad de una nave o estación espacial.
+# Incluye la capacidad de tripulación y de pasajeros, y métodos para gestionar pasajeros.
 
 # La clase DatosCapacidad se implementa para refactorizar el código, 
 # ya que tanto EstacionEspacial como NaveEstelar comparten atributos y métodos relacionados con la capacidad de tripulación y pasajeros.
@@ -159,23 +164,40 @@ class Nave(UnidadCombate, ABC):
 
 class DatosCapacidad:
     def __init__(self, tripulacion:int, pasaje:int):
+
+        # la excepción es para comprobar que la tripulacion o pasajeros son negativos
+
         if tripulacion < 0 or pasaje < 0:
             raise ValueError("Capacidad inválida")
-        self.tripulacion = tripulacion
-        self.pasaje = pasaje
+        
+        self.tripulacion = tripulacion # es el número de plazas para la tripulación
+        self.pasaje = pasaje # número de plazas para pasajeros
 
     def get_capacidad(self):
+
+        # Calcula la capacidad total de la nave o estación.
+        # donde devuelve la suma de tripulación y pasajeros
+
         return self.tripulacion + self.pasaje
     
     def añadir_pasajeros(self, cantidad):
+
+        # se encarga de añadir pasajeros a la nave/estación.
+        # donde cantidad es el número de pasajeros a añadir y comprueba que no sea negativo
+
         if cantidad <= 0:
             raise ValueError("Cantidad inválida")
         self.pasaje += cantidad
 
     def quitar_pasajeros(self, cantidad):
+
+        # Quita pasajeros de la nave/estación
+        # donde cantidad es el número de pasajeros a quitar (debe ser >0 y <= pasaje actual)
+
         if cantidad <= 0 or cantidad > self.pasaje:
             raise ValueError("Cantidad inválida")
         self.pasaje -= cantidad
+
 
 # La clase EstacionEspacial utiliza herencia múltiple con Nave y DatosCapacidad para combinar las funcionalidades de una nave (nombre, piezas, gestión de repuestos)
 # con la gestión de la capacidad de tripulación y pasajeros.
