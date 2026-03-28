@@ -259,32 +259,56 @@ class NaveEstelar(Nave, DatosCapacidad):
         # Modifica la clase (tipo --> Enum Clase) de la nave estelar
         self.clase = clase 
 
+# CLASE CAZA ESTELAR 
+# Clase que representa un caza estelar del imperio.
+# Hereda de la clase Nave, por lo que dispone de atributos de combate,
+# nombre y gestión de piezas.
+# Se caracteriza por tener una dotación, es decir, una tripulación reducida
+
 class CazaEstelar(Nave):
+
     def __init__(self, id_combate:str, clave:int, nombre:str, dotacion:int, piezas:list[str]=None):
+        
+        # Inicialización de la clase padre (Nave)
         super().__init__(id_combate, clave, nombre, piezas)
 
         if dotacion <= 0:
             raise ValueError("La dotación debe ser positiva")
         
-        self.dotacion = dotacion
+        self.dotacion = dotacion # número de tripulantes de la caza
 
     def __str__(self):
         return super().__str__() + f"\nDotacion: {self.dotacion}"
     
     def get_dotacion(self):
+
+        #  Devuelve la dotación actual del caza (el número de tripulantes)
+
         return self.dotacion
     
     def set_dotacion(self, dotacion : int):
+
+        # modifica la dotación de la caza, pero esta nueva dotación tiene que ser mayor que cero,
+        # es decir, tiene que ser positiva, por ello tenemos una excepción
+
         if dotacion <= 0:
             raise ValueError("La dotación debe ser positiva")
         self.dotacion = dotacion
 
     def aumentar_dotacion(self, cantidad):
+
+        # aumenta la dotación de la caza estelar, donde se añade una excepción para que el número de
+        # tripulantes ser mayor que cero 
+
         if cantidad <= 0:
             raise ValueError("Cantidad inválida")
         self.dotacion += cantidad
 
     def reducir_dotacion(self, cantidad):
+
+        # reduce la dotación de la caza 
+        # donde cantidad es el número de tripulantes a eliminar (debe ser > 0 y no mayor que la dotación actual).
+
         if cantidad <= 0 or cantidad > self.dotacion:
             raise ValueError("Cantidad inválida")
         self.dotacion -= cantidad
