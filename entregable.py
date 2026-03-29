@@ -107,7 +107,7 @@ class Nave(UnidadCombate, ABC):
 
         return  super().__str__() + f"\nNombre: {self.nombre} \nPiezas: {', '.join(self.piezas)}"
 
-    def añadir_piezas(self, pieza_repuesto):
+    def añadir_piezas(self, pieza_repuesto: str):
 
         # este método lo que hace es añadir una pieza a la nave, donde pieza_repuesto es el nombre de la pieza añadida
         # nos va a devolver una excepción si la pieza ya existe en la nave 
@@ -116,7 +116,7 @@ class Nave(UnidadCombate, ABC):
             raise ValueError("Pieza ya incluida")
         self.piezas.append(pieza_repuesto)
 
-    def quitar_piezas(self, pieza_repuesto):
+    def quitar_piezas(self, pieza_repuesto: str):
 
         # elimina una pieza de la nave, donde indicamos el nombre de la pieza que queremos quitar,
         # da una excepción si la pieza no está en la nave 
@@ -131,7 +131,7 @@ class Nave(UnidadCombate, ABC):
 
         print(f"La lista de piezas de la nave {self.nombre} es: {', '.join(self.piezas)}") 
 
-    def tiene_pieza(self, pieza):
+    def tiene_pieza(self, pieza: str):
 
         # Comprueba si la nave tiene una pieza determinada y devuelve un  booleano
         # donde ees True si la pieza está en la nave y False si no.
@@ -180,7 +180,7 @@ class DatosCapacidad:
 
         return self.tripulacion + self.pasaje
     
-    def añadir_pasajeros(self, cantidad):
+    def añadir_pasajeros(self, cantidad: int):
 
         # se encarga de añadir pasajeros a la nave/estación.
         # donde cantidad es el número de pasajeros a añadir y comprueba que no sea negativo
@@ -189,7 +189,7 @@ class DatosCapacidad:
             raise ValueError("Cantidad inválida")
         self.pasaje += cantidad
 
-    def quitar_pasajeros(self, cantidad):
+    def quitar_pasajeros(self, cantidad: int):
 
         # Quita pasajeros de la nave/estación
         # donde cantidad es el número de pasajeros a quitar (debe ser >0 y <= pasaje actual)
@@ -295,7 +295,7 @@ class CazaEstelar(Nave):
             raise ValueError("La dotación debe ser positiva")
         self.dotacion = dotacion
 
-    def aumentar_dotacion(self, cantidad):
+    def aumentar_dotacion(self, cantidad: int):
 
         # aumenta la dotación de la caza estelar, donde se añade una excepción para que el número de
         # tripulantes ser mayor que cero 
@@ -304,7 +304,7 @@ class CazaEstelar(Nave):
             raise ValueError("Cantidad inválida")
         self.dotacion += cantidad
 
-    def reducir_dotacion(self, cantidad):
+    def reducir_dotacion(self, cantidad: int):
 
         # reduce la dotación de la caza 
         # donde cantidad es el número de tripulantes a eliminar (debe ser > 0 y no mayor que la dotación actual).
@@ -318,7 +318,7 @@ class CazaEstelar(Nave):
 # va a tener un atributo privado, que va a ser "cantidad"
 
 class Repuesto:
-    def __init__(self, nombre, proveedor, cantidad, precio):
+    def __init__(self, nombre: str, proveedor: str, cantidad: int, precio: float):
 
         if not nombre:
             raise ValueError("El nombre no puede estar vacío")
@@ -337,7 +337,7 @@ class Repuesto:
     def __str__(self):
         return f'Repuesto: {self.nombre} \nCantidad: {self.__cantidad} \nProveedor: {self.proveedor} \nPrecio: {self.precio}'
 
-    def disminuir_cantidad(self, cantidad):
+    def disminuir_cantidad(self, cantidad: int):
 
         # reduce la cantidad disponible del repuesto, donde cantidad es el número de cantidades a restar
         # donde devuelve una excepción si la cantidad es inválida o supera el stock disponible
@@ -348,7 +348,7 @@ class Repuesto:
             raise ValueError(f"No hay suficiente stock de {self.nombre} (disponibles: {self.__cantidad})")
         self.__cantidad -= cantidad
             
-    def aumentar_cantidad(self, cantidad):
+    def aumentar_cantidad(self, cantidad: int):
 
         # Aumenta la cantidad disponible del repuesto
 
@@ -375,7 +375,7 @@ class Repuesto:
 
         return self.precio
 
-    def set_precio(self, precio):
+    def set_precio(self, precio: float):
 
         # Modifica el precio del repuesto
 
@@ -425,14 +425,14 @@ class Almacen:
     def __str__(self):
         return f"Almacen {self.nombre} \nLocalizacion: {self.localizacion}"
 
-    def repuesto_en_almacen(self, repuesto):
+    def repuesto_en_almacen(self, repuesto: Repuesto):
 
         # Comprueba si un repuesto está en el catálogo del almacén, donde devuelve un booleano
         # True si está en el almacén, False en caso contrario
 
         return repuesto in self.catalogo
     
-    def buscar_repuesto(self, nombre):
+    def buscar_repuesto(self, nombre: str):
 
         # Busca un repuesto por su nombre, donde nos va a devolver el repuesto si existe, o None si no se encuentra
 
@@ -518,7 +518,7 @@ class Usuario(ABC):
 
 class Comandante(Usuario):
     
-    def __init__(self, nombre, id_usuario):
+    def __init__(self, nombre: str, id_usuario: int):
         super().__init__(nombre, id_usuario)
 
     def consultar_almacen(self, almacen: Almacen):
@@ -543,7 +543,7 @@ class Comandante(Usuario):
 # Hereda de Usuario 
 
 class Operario(Usuario):
-    def __init__(self, nombre, id_usuario):
+    def __init__(self, nombre: str, id_usuario: int):
         super().__init__(nombre, id_usuario)   
 
     def gestionar_stock(self, almacen:Almacen):
@@ -599,7 +599,7 @@ class MiImperio:
         else:
             self.usuarios.append(usuario)
 
-    def alta_unidad_combate(self, unidad_combate):
+    def alta_unidad_combate(self, unidad_combate: UnidadCombate):
 
         # Añade una unidad de combate al imperio
 
@@ -638,7 +638,7 @@ class MiImperio:
         else:
             self.usuarios.remove(usuario)
 
-    def baja_unidad_combate(self, unidad_combate):
+    def baja_unidad_combate(self, unidad_combate: UnidadCombate):
 
         # Elimina una unidad de combate del imperio
 
