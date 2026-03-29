@@ -457,7 +457,7 @@ bg=pink</panel_attributes>
       <w>280</w>
       <h>16</h>
     </coordinates>
-    <panel_attributes>gestionar_repuestos(almacen, repuesto)
+    <panel_attributes>gestionar_repuesto(almacen, repuesto)
 
 style=wordwrap</panel_attributes>
     <additional_attributes/>
@@ -790,6 +790,32 @@ style=wordwrap</panel_attributes>
       <h>216</h>
     </coordinates>
     <panel_attributes/>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>488</x>
+      <y>648</y>
+      <w>192</w>
+      <h>16</h>
+    </coordinates>
+    <panel_attributes>bool
+
+style=wordwrap</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>1472</x>
+      <y>696</y>
+      <w>192</w>
+      <h>16</h>
+    </coordinates>
+    <panel_attributes>bool
+
+style=wordwrap</panel_attributes>
     <additional_attributes/>
   </element>
 </diagram>
