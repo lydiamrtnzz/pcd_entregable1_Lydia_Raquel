@@ -720,12 +720,12 @@ def demo():
 
         # Crear unidades de combate
         nave1 = NaveEstelar("NC-01", 1, "Eclipse", 10, 20, Clase.ECLIPSE)
-        nave2 = CazaEstelar("C-01", 2, "Faucon", 5)
+        caza = CazaEstelar("C-01", 2, "Faucon", 5)
         estacion = EstacionEspacial("ES-01", 3, "Estación Endor", 50, 100, Ubicacion.ENDOR)
 
         # Alta de unidades en imperio
         imperio.alta_unidad_combate(nave1)
-        imperio.alta_unidad_combate(nave2)
+        imperio.alta_unidad_combate(caza)
         imperio.alta_unidad_combate(estacion)
         print("Unidades de combate en el imperio:")
         imperio.listar_unidades_combate()
@@ -771,11 +771,11 @@ def demo():
         print(f"Pasaje después de quitar 5 pasajeros: {estacion.pasaje}\n")
 
         # Probar aumentar/reducir dotación caza estelar
-        print(f"Dotación original de {nave2.nombre}: {nave2.dotacion}")
-        nave2.aumentar_dotacion(3)
-        print(f"Dotación después de aumentar: {nave2.dotacion}")
-        nave2.reducir_dotacion(2)
-        print(f"Dotación después de reducir: {nave2.dotacion}")
+        print(f"Dotación original de {caza.nombre}: {caza.dotacion}")
+        caza.aumentar_dotacion(3)
+        print(f"Dotación después de aumentar: {caza.dotacion}")
+        caza.reducir_dotacion(2)
+        print(f"Dotación después de reducir: {caza.dotacion}")
 
         # Mostrar capacidades
         print(f"Capacidad total de {nave1.nombre}: {nave1.get_capacidad()}")
@@ -792,7 +792,7 @@ def demo():
         print()
         
         imperio.baja_usuario(comandante)
-        imperio.baja_unidad_combate(nave2)
+        imperio.baja_unidad_combate(caza)
         imperio.baja_almacen(almacen)
         print("Después de bajas:")
         print("Usuarios:")
